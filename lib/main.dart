@@ -14,6 +14,140 @@ class Calculator extends StatefulWidget {
 }
 
 class _CalculatorState extends State<Calculator> {
+  String displayNum = '0';
+  String? btnText;
+
+  int num1 = 0;
+  int? num2;
+
+  String? operator;
+  String? cache;
+
+  String results = '0';
+
+  void operation(String btnText) {
+    switch (btnText) {
+      case 'AC':
+        setState(() {
+          num1 = 0;
+          num2 = null;
+          operator = null;
+          results = '0';
+          displayNum = results;
+        });
+        break;
+
+      case '+/-':
+        if (results != '0') {
+          int num = int.parse(displayNum) * -1;
+          setState(() {
+            results = (num).toString();
+            displayNum = results;
+          });
+        }
+        break;
+
+      case '%':
+        displayNum = btnText;
+        num1 = int.parse(displayNum);
+        double num = (num1 / 100);
+        results = num.toStringAsFixed(0); // Always display % result as integer
+        setState(() {
+          displayNum = results;
+          cache = '$num1 %'; // Store for further calculations
+        });
+        break;
+
+      case '÷':
+      case 'x':
+      case '-':
+      case '+':
+        // Handling other arithmetic operations:
+        operator = btnText;
+        num1 = int.parse(displayNum);
+        setState(() {
+          displayNum = '$num1';
+        });
+        break;
+
+      case '=':
+        // Handling calculation based on stored operator and operands:
+        if (operator != null && num1 != 0) {
+          num2 = int.parse(displayNum);
+          dynamic num;
+          switch (operator) {
+            case '÷':
+              if (num2 == 0) {
+                // Handle division by zero error
+                results = "Error";
+              } else {
+                num = num1 / num2!;
+              }
+              break;
+            case 'x':
+              num = (num1 * num2!);
+              break;
+            case '-':
+              num = (num1 - num2!);
+              break;
+            case '+':
+              num = (num1 + num2!);
+              break;
+          }
+          if (results == "Error") {
+            results;
+            
+          } else {
+            // Similar logic to previous version for result display
+            results = double.tryParse(num.toString()) != null
+                ? num.toStringAsFixed(2)
+                : num.toString();
+          }
+
+          setState(() {
+            displayNum = results;
+            operator = null;
+            num1 = 0;
+            num2 = null; 
+            cache = null;
+          });
+        }
+        break;
+
+      default:
+        // Handle number buttons (0-9):
+        setState(() {
+          if (displayNum == '0' || operator != null) {
+            displayNum = btnText;
+          } else {
+            displayNum += btnText;
+          }
+        });
+    }
+  }
+
+  Widget calcButton({btnText, btnBackground, btnTextColor}) {
+    return ElevatedButton(
+      onPressed: () => operation(btnText),
+      style: ElevatedButton.styleFrom(
+        shape: const StadiumBorder(),
+        backgroundColor: btnBackground,
+      ),
+      child: CircleAvatar(
+        radius: 30.0,
+        backgroundColor: btnBackground,
+        child: Text(
+          btnText,
+          style: TextStyle(
+            color: btnTextColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 30.0,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,14 +158,14 @@ class _CalculatorState extends State<Calculator> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(2.0, 50.0, 10.0, 0.0),
+                  padding: const EdgeInsets.fromLTRB(2.0, 50.0, 10.0, 0.0),
                   child: Text(
-                    '0',
-                    style: TextStyle(
+                    displayNum,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 80.0,
                     ),
@@ -141,7 +275,7 @@ class _CalculatorState extends State<Calculator> {
                     height: 80,
                     width: 80,
                     child: calcButton(
-                        btnText: '×',
+                        btnText: 'x',
                         btnBackground: Colors.orange,
                         btnTextColor: Colors.white),
                   ),
@@ -303,26 +437,4 @@ class _CalculatorState extends State<Calculator> {
       )),
     );
   }
-}
-
-Widget calcButton({btnText, btnBackground, btnTextColor}) {
-  return ElevatedButton(
-    onPressed: () {},
-    style: ElevatedButton.styleFrom(
-      shape: const StadiumBorder(),
-      backgroundColor: btnBackground,
-    ),
-    child: CircleAvatar(
-      radius: 30.0,
-      backgroundColor: btnBackground,
-      child: Text(
-        btnText,
-        style: TextStyle(
-          color: btnTextColor,
-          fontWeight: FontWeight.bold,
-          fontSize: 30.0,
-        ),
-      ),
-    ),
-  );
 }
