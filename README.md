@@ -1,6 +1,6 @@
-# myapp
+# Iphone Calculator clone
 
-A new Flutter project.
+As part of learning flutter. I built this project to test out my understanding of the use of flutter widgets
 
 ## Getting Started
 
@@ -14,3 +14,8 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+## UI
+
+![Image1](https://github.com/ayyesu/ios-calculator/blob/main/screenshots/Screenshot%201.png)
+![usecase image](https://github.com/ayyesu/ios-calculator/blob/main/screenshots/Screenshot%204.png)
