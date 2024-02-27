@@ -100,10 +100,10 @@ class _CalculatorState extends State<Calculator> {
           } else {
             if (num is int) {
               results = num.toString();
-          } else if (num is double) {
+            } else if (num is double) {
               // Convert double to string with two decimal places
               results = num.toStringAsFixed(2);
-          }
+            }
           }
 
           setState(() {
