@@ -17,8 +17,8 @@ class _CalculatorState extends State<Calculator> {
   String displayNum = '0';
   String? btnText;
 
-  int num1 = 0;
-  int? num2;
+  dynamic num1 = 0;
+  dynamic num2;
 
   String? operator;
   String? cache;
@@ -39,9 +39,11 @@ class _CalculatorState extends State<Calculator> {
 
       case '+/-':
         if (results != '0') {
-          int num = int.parse(displayNum) * -1;
+          double num = double.parse(displayNum);
+          num *= -1;
+          results = num.toString();
+
           setState(() {
-            results = (num).toString();
             displayNum = results;
           });
         }
@@ -51,9 +53,9 @@ class _CalculatorState extends State<Calculator> {
         displayNum = btnText;
         num1 = int.parse(displayNum);
         double num = (num1 / 100);
-        results = num.toStringAsFixed(0);
+
         setState(() {
-          displayNum = results;
+          results = num.toStringAsFixed(0);
           cache = '$num1 %';
         });
         break;
@@ -96,20 +98,14 @@ class _CalculatorState extends State<Calculator> {
           }
           if (results == "Error") {
             results;
-            displayNum = num1.toString();
           } else {
-            if (num is int) {
-              results = num.toString();
-            } else if (num is double) {
-              // Convert double to string with two decimal places
-              results = num.toStringAsFixed(2);
-            }
+            results = num.toString(); // Changed to double
           }
 
           setState(() {
             displayNum = results;
             operator = null;
-            num1 = 0;
+            num1 = 0; // Changed to double
             num2 = null;
             cache = null;
           });
@@ -160,20 +156,23 @@ class _CalculatorState extends State<Calculator> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(2.0, 50.0, 10.0, 0.0),
-                  child: Text(
-                    displayNum,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 80.0,
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(2.0, 50.0, 10.0, 0.0),
+                    child: Text(
+                      displayNum,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 80.0,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             const SizedBox(height: 20.0),
             // Row 1
