@@ -96,7 +96,7 @@ class _CalculatorState extends State<Calculator> {
           }
           if (results == "Error") {
             results;
-            
+            displayNum = num1.toString();
           } else {
             // Similar logic to previous version for result display
             results = double.tryParse(num.toString()) != null
@@ -108,7 +108,7 @@ class _CalculatorState extends State<Calculator> {
             displayNum = results;
             operator = null;
             num1 = 0;
-            num2 = null; 
+            num2 = null; // Reset second operand as well
             cache = null;
           });
         }
