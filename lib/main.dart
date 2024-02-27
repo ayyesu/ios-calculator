@@ -51,10 +51,10 @@ class _CalculatorState extends State<Calculator> {
         displayNum = btnText;
         num1 = int.parse(displayNum);
         double num = (num1 / 100);
-        results = num.toStringAsFixed(0); // Always display % result as integer
+        results = num.toStringAsFixed(0);
         setState(() {
           displayNum = results;
-          cache = '$num1 %'; // Store for further calculations
+          cache = '$num1 %';
         });
         break;
 
@@ -98,17 +98,19 @@ class _CalculatorState extends State<Calculator> {
             results;
             displayNum = num1.toString();
           } else {
-            // Similar logic to previous version for result display
-            results = double.tryParse(num.toString()) != null
-                ? num.toStringAsFixed(2)
-                : num.toString();
+            if (num is int) {
+              results = num.toString();
+          } else if (num is double) {
+              // Convert double to string with two decimal places
+              results = num.toStringAsFixed(2);
+          }
           }
 
           setState(() {
             displayNum = results;
             operator = null;
             num1 = 0;
-            num2 = null; // Reset second operand as well
+            num2 = null;
             cache = null;
           });
         }
