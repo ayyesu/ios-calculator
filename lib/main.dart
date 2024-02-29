@@ -38,10 +38,10 @@ class _CalculatorState extends State<Calculator> {
         break;
 
       case '+/-':
-        if (results != '0') {
+        if (displayNum != '0') {
           double num = double.parse(displayNum);
           num *= -1;
-          results = num.toString();
+          results = num.toStringAsFixed(0);
 
           setState(() {
             displayNum = results;
