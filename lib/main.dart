@@ -50,12 +50,11 @@ class _CalculatorState extends State<Calculator> {
         break;
 
       case '%':
-        displayNum = btnText;
         num1 = int.parse(displayNum);
         double num = (num1 / 100);
-
+        results = num.toString();
         setState(() {
-          results = num.toStringAsFixed(0);
+          displayNum = results;
           cache = '$num1 %';
         });
         break;
@@ -99,13 +98,13 @@ class _CalculatorState extends State<Calculator> {
           if (results == "Error") {
             results;
           } else {
-            results = num.toString(); // Changed to double
+            results = num.toString();
           }
 
           setState(() {
             displayNum = results;
             operator = null;
-            num1 = 0; // Changed to double
+            num1 = 0;
             num2 = null;
             cache = null;
           });
