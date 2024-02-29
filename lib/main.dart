@@ -59,13 +59,29 @@ class _CalculatorState extends State<Calculator> {
         });
         break;
 
+      case '.':
+        if (!displayNum.contains('.')) {
+          displayNum += '.';
+        }
+
+        setState(() {
+          displayNum;
+        });
+        break;
+
       case '÷':
       case 'x':
       case '-':
       case '+':
         // Handling other arithmetic operations:
         operator = btnText;
-        num1 = int.parse(displayNum);
+        num? parsedNum = num.tryParse(displayNum);
+        if (parsedNum is int) {
+          num1 = int.parse(displayNum);
+        } else {
+          num1 = double.parse(displayNum);
+        }
+
         setState(() {
           displayNum = '$num1';
         });
@@ -74,31 +90,36 @@ class _CalculatorState extends State<Calculator> {
       case '=':
         // Handling calculation based on stored operator and operands:
         if (operator != null && num1 != 0) {
-          num2 = int.parse(displayNum);
-          dynamic num;
+          num? parsedNum = num.tryParse(displayNum);
+          if (parsedNum is int) {
+            num2 = int.parse(displayNum);
+          } else {
+            num2 = double.parse(displayNum);
+          }
+          dynamic number;
           switch (operator) {
             case '÷':
               if (num2 == 0) {
-                // Handle division by zero error
+                // Handling division by zero error
                 results = "Error";
               } else {
-                num = num1 / num2!;
+                number = num1 / num2!;
               }
               break;
             case 'x':
-              num = (num1 * num2!);
+              number = (num1 * num2!);
               break;
             case '-':
-              num = (num1 - num2!);
+              number = (num1 - num2!);
               break;
             case '+':
-              num = (num1 + num2!);
+              number = (num1 + num2!);
               break;
           }
           if (results == "Error") {
             results;
           } else {
-            results = num.toString();
+            results = number.toString();
           }
 
           setState(() {
